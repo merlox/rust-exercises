@@ -4,11 +4,13 @@ Given a list of integers, use a vector and return the mean (the average value), 
 
 */
 
+use std::collections::HashMap;
+
 fn main() {
-    let integers = vec![9, 2, 8, 1, 7, 4, 6, 5, 3];
+    let integers = vec![9, 5, 2, 8, 1, 7, 4, 2, 6, 2, 3, 2];
     println!("The mean is {}", mean(&integers));
     println!("The median is {}", median(&integers));
-    // println!("The median is {}", median(integers));
+    println!("The most common value is {}", mode(&integers));
 }
 
 fn mean(integers: &Vec<i32>) -> i32 {
@@ -25,7 +27,25 @@ fn mean(integers: &Vec<i32>) -> i32 {
 fn median(integers: &Vec<i32>) -> i32 {
     let mid = integers.len() / 2;
     let sorted = merge_sort(&integers);
+    println!("The sorted vector is {:?}", sorted);
     sorted[mid]
+}
+
+// The value that occurs most often
+fn mode(integers: &Vec<i32>) -> u32 {
+    // Create a hashmap of ints and empty values {1: 0, 2: 0 , ...} where the value is the repeated counter
+    let mut map = HashMap::new();
+    let mut most_repeated_value: u32 = 0;
+    let mut most_repeated_times: u32 = 0;
+    for integer in integers {
+        let count = map.entry(integer).or_insert(0);
+        *count += 1;
+        if count > &mut most_repeated_times {
+            most_repeated_value = *integer as u32;
+            most_repeated_times = *count;
+        }
+    }
+    most_repeated_value
 }
 
 // Merge sort is O(n log n) which is more efficient than the classic O(n") from the normal sort
